@@ -6,6 +6,7 @@ import Login from 'pages/Login';
 import Registro from 'pages/Registro';
 import PublicLayout from 'layouts/PublicLayout';
 import PrivateLayout from 'layouts/PrivateLayout';
+import AuthLayout from 'layouts/AuthLayout';
 import Clientes from 'pages/Admin/Clientes';
 import Vehiculos from 'pages/Admin/Vehiculos';
 
@@ -16,8 +17,8 @@ function App() {
     <div >
       <BrowserRouter>
         <Routes>
-            <Route path='/login' element= {< Login/> } />
-            <Route path="/registro" element= {< Registro />} />  
+            <Route path='/login' element= { <AuthLayout> < Login/>   </AuthLayout> } />
+            <Route path="/registro" element= { <AuthLayout>  < Registro />  </AuthLayout> } />  
             <Route path="/admin" element={<PrivateLayout> < Admin /> </PrivateLayout>} />
             <Route path="/admin/vehiculos" element={<PrivateLayout> < Vehiculos /> </PrivateLayout>} />
             <Route path="/admin/clientes" element={<PrivateLayout> < Clientes /> </PrivateLayout>} />
