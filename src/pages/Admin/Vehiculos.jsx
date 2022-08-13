@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const vehiculosBackend = [
   {
@@ -68,7 +70,18 @@ const Vehiculos = () => {
              { textoBoton }
           </button>
       </div>
-      { mostrarTabla ? <TablaVehiculos listaVehiculos= { vehiculos }/> : <FormularioCreacionVehiculos /> }  
+      { mostrarTabla ? (<TablaVehiculos listaVehiculos= { vehiculos }/>
+      ) 
+      : 
+      (
+      <FormularioCreacionVehiculos  
+      funcionParaMostrarLaTabla = { setMostrarTabla } 
+      listaVehiculos = { vehiculos }
+      funcionParaAgregarVehiculo = { setVehiculos } />) }
+      <ToastContainer 
+        position='botton-center' 
+        autoClose={4000}
+      />
     </div>
   );
 };
@@ -105,18 +118,75 @@ const Vehiculos = () => {
       </div>)
   };
 
-  const FormularioCreacionVehiculos = () => {
+  const FormularioCreacionVehiculos = ({ 
+    funcionParaMostrarLaTabla, 
+    listaVehiculos, 
+    funcionParaAgregarVehiculo,
+   }) => {
+
+    const [nombre, setNombre] = useState();
+    const [marca, setMarca] = useState();
+    const [modelo, setModelo] = useState();
+
+    const enviarAlBackend = () => {
+      console.log('nombre',nombre, 'marca',marca , 'modelo',modelo);
+      toast.success('Vehículo creado con éxito')
+      funcionParaMostrarLaTabla(true)
+      funcionParaAgregarVehiculo ([...listaVehiculos, {nombre:nombre, marca:marca, modelo:modelo},
+      ]);
+    };
     return (
       <div className='flex flex-col items-center justify-center'>
         <h2 className='text-2xl font-extrabold text-gray-800'>
           Crear Nuevo Vehículo
           </h2>
-        <form className='grid grid-col-2'>
-          <input className='bg-gray-100 border-gray-00 p-2 rounded-lg m-2' type="text" />
-          <input className='bg-gray-100 border-gray-600 p-2 rounded-lg m-2' type="text" />
-          <input className='bg-gray-100 border-gray-600 p-2 rounded-lg m-2' type="text" />
-          <input className='bg-gray-100 border-gray-600 p-2 rounded-lg m-2' type="text" />
-          <button className='col-span-2 bg-green-400 p-2 rounded-full shadow-md hover:bg-green-600 text-white'>
+          <form className='flex flex-col'>
+            <label className='flex flex-col' htmlFor="nombre">
+              Nombre del Vehiculo:
+              <input 
+                name='nombre'
+                className='bg-gray-100 border-gray-00 p-2 rounded-lg m-2' 
+                type="text"
+                placeholder='corolla' 
+                value={nombre}
+                onChange={(e) => {
+                  setNombre(e.target.value);
+                }}
+              />
+            </label>
+            <label className='flex flex-col' htmlFor="marca"> Marca del vehiculo 
+              <select 
+                className='bg-gray-100 border-gray-00 p-2 rounded-lg m-2'  name="marca"
+                value={marca}
+                onChange={(e) => { 
+                  setMarca(e.target.value);
+                }}>
+                <option disabled>Seleccione una opcion</option>
+                <option>Renault</option>
+                <option>Toyota</option>
+                <option>Ford</option>
+                <option>Mazda</option>
+                <option>Chevrolet</option>
+              </select>
+            </label>
+            <label className='flex flex-col items-center' htmlFor="modelo">
+              Modelo del Vehiculo
+              <input 
+              value={modelo}
+                onChange={(e) => {
+                  setModelo(e.target.value);
+                }}
+              name='modelo' 
+              className='bg-gray-100 border-gray-00 p-2 rounded-lg m-2'
+              type="number"
+              min={1950}
+              max={2024}
+              placeholder='2024' />
+            </label>
+            <input  />
+            <button type='button' 
+            className='col-span-2 bg-green-400 p-2 rounded-full shadow-md hover:bg-green-600 text-white'
+            onClick={() =>{enviarAlBackend()}}>
             Guardar Vehículo
             </button>
         </form>
