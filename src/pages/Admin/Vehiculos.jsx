@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -70,14 +71,14 @@ const Vehiculos = () => {
              { textoBoton }
           </button>
       </div>
-      { mostrarTabla ? (<TablaVehiculos listaVehiculos= { vehiculos }/>
-      ) 
-      : 
-      (
+      { mostrarTabla ? (
+      <TablaVehiculos listaVehiculos= { vehiculos } />
+      ) : (
       <FormularioCreacionVehiculos  
-      funcionParaMostrarLaTabla = { setMostrarTabla } 
+      setMostrarTabla = { setMostrarTabla } 
+      setVehiculos = { setVehiculos }
       listaVehiculos = { vehiculos }
-      funcionParaAgregarVehiculo = { setVehiculos } />) }
+       />) }
       <ToastContainer 
         position='botton-center' 
         autoClose={4000}
@@ -119,49 +120,51 @@ const Vehiculos = () => {
   };
 
   const FormularioCreacionVehiculos = ({ 
-    funcionParaMostrarLaTabla, 
+    setMostrarTabla, 
     listaVehiculos, 
-    funcionParaAgregarVehiculo,
+    setVehiculos,
    }) => {
 
-    const [nombre, setNombre] = useState();
-    const [marca, setMarca] = useState();
-    const [modelo, setModelo] = useState();
+    const form = useRef(null);
 
-    const enviarAlBackend = () => {
-      console.log('nombre',nombre, 'marca',marca , 'modelo',modelo);
-      toast.success('Vehículo creado con éxito')
-      funcionParaMostrarLaTabla(true)
-      funcionParaAgregarVehiculo ([...listaVehiculos, {nombre:nombre, marca:marca, modelo:modelo},
-      ]);
-    };
+    const submitForm = (e) => {
+      e.preventDefault();
+      const fd = new FormData(form.current)
+
+      const nuevoVehiculo = {};
+      fd.forEach((value, key) =>{
+        nuevoVehiculo[key] = value;
+        console.log(nuevoVehiculo)
+      });
+
+      setMostrarTabla(true);
+      toast.success('Vehiculo agregado con exito');
+      setVehiculos([...listaVehiculos, nuevoVehiculo]);
+    }
+
     return (
       <div className='flex flex-col items-center justify-center'>
         <h2 className='text-2xl font-extrabold text-gray-800'>
           Crear Nuevo Vehículo
           </h2>
-          <form className='flex flex-col'>
+          <form ref={form} onSubmit={ submitForm } className='flex flex-col'>
             <label className='flex flex-col' htmlFor="nombre">
               Nombre del Vehiculo:
               <input 
-                name='nombre'
+                name='nombre' required
                 className='bg-gray-100 border-gray-00 p-2 rounded-lg m-2' 
                 type="text"
                 placeholder='corolla' 
-                value={nombre}
-                onChange={(e) => {
-                  setNombre(e.target.value);
-                }}
               />
             </label>
             <label className='flex flex-col' htmlFor="marca"> Marca del vehiculo 
               <select 
-                className='bg-gray-100 border-gray-00 p-2 rounded-lg m-2'  name="marca"
-                value={marca}
-                onChange={(e) => { 
-                  setMarca(e.target.value);
-                }}>
-                <option disabled>Seleccione una opcion</option>
+                className='bg-gray-100 border-gray-00 p-2 rounded-lg m-2'  
+                name="marca"
+                required
+                defaultValue={0}
+                >
+                <option value={0} disabled>Seleccione una opcion</option>
                 <option>Renault</option>
                 <option>Toyota</option>
                 <option>Ford</option>
@@ -172,26 +175,22 @@ const Vehiculos = () => {
             <label className='flex flex-col items-center' htmlFor="modelo">
               Modelo del Vehiculo
               <input 
-              value={modelo}
-                onChange={(e) => {
-                  setModelo(e.target.value);
-                }}
               name='modelo' 
               className='bg-gray-100 border-gray-00 p-2 rounded-lg m-2'
               type="number"
-              min={1950}
+              min={1980}
               max={2024}
-              placeholder='2024' />
+              placeholder='año' />
             </label>
             <input  />
-            <button type='button' 
+            <button type='submit' 
             className='col-span-2 bg-green-400 p-2 rounded-full shadow-md hover:bg-green-600 text-white'
-            onClick={() =>{enviarAlBackend()}}>
+            >
             Guardar Vehículo
             </button>
         </form>
       </div>
-    )
+    );
   };
 
 
