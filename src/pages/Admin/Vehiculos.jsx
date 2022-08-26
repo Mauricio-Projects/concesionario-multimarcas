@@ -140,7 +140,11 @@ const Vehiculos = () => {
       setMostrarTabla(true);
       toast.success('Vehiculo agregado con exito');
       setVehiculos([...listaVehiculos, nuevoVehiculo]);
-    }
+      //TODO identificar el caso de exito y mostrar un toast de exito
+      toast.success('Vehiculo agregado con exito');
+      //TODO identificar el caso de error y mostrar yn toas de error
+      //toast.error('error creando un vehiculo');
+    };
 
     return (
       <div className='flex flex-col items-center justify-center'>
@@ -151,7 +155,8 @@ const Vehiculos = () => {
             <label className='flex flex-col' htmlFor="nombre">
               Nombre del Vehiculo:
               <input 
-                name='nombre' required
+                name='nombre' 
+                required
                 className='bg-gray-100 border-gray-00 p-2 rounded-lg m-2' 
                 type="text"
                 placeholder='corolla' 
@@ -164,7 +169,7 @@ const Vehiculos = () => {
                 required
                 defaultValue={0}
                 >
-                <option value={0} disabled>Seleccione una opcion</option>
+                <option disabled value={0} >Seleccione una opcion</option>
                 <option>Renault</option>
                 <option>Toyota</option>
                 <option>Ford</option>

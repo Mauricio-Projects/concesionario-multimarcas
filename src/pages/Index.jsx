@@ -1,8 +1,12 @@
+import { useDarkMode } from 'contex/darkMode'
 import React from 'react'
 
 const Index = () => {
+  const { darkMode } = useDarkMode();
   return (
-    <div>Contenido Landing Concesionario</div>
+    
+    <div className={`flex h-full ${darkMode ? 'bg-gray-900': 'bg-gray-50'}`}>
+    Contenido Landing Concesionario</div>
   )
 }
 
