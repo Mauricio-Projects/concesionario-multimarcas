@@ -1,22 +1,23 @@
 import React from 'react'
 import ImagenLogo from 'components/ImagenLogo'
 import { Link } from 'react-router-dom'
+import 'styles/responsive.css'
 
 
 const Sidebar = () => {
   return (
-    <nav className='w-72 border border-gray-300 h-full flex flex-col  bg bg-gray-400 p-4'>
+    <nav className=' w-72 border border-gray-300 h-full flex flex-col  bg bg-gray-400 p-4 sidebar'>
       <Link to='admin'>
         <ImagenLogo />
       </Link>
       <div className='my-4'>
       <Ruta icono='fas fa-user' ruta='/admin/perfil' nombre='perfil' />
       <Ruta icono='fas fa-car' ruta='/admin/vehiculos' nombre='vehículos' />
-      <Ruta icono='fas fa-car' ruta='/admin/ventas' nombre='ventas' />
-      <Ruta icono='fas fa-car' ruta='/admin/usuarios' nombre='usuarios' />
+      <Ruta icono='fas fa-cash-register' ruta='/admin/ventas' nombre='ventas' />
+      <Ruta icono='fas fa-users' ruta='/admin/usuarios' nombre='usuarios' />
       </div>
 
-      <button>Cerrar Sesión</button>
+      <button className=''>Cerrar Sesión</button>
     </nav>
   );
 };

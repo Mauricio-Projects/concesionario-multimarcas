@@ -11,6 +11,8 @@ import Clientes from 'pages/Admin/Clientes';
 import Vehiculos from 'pages/Admin/Vehiculos';
 import { DarkModeContext } from 'contex/darkMode';
 import React, { useState } from 'react';
+import 'styles/responsive.css'
+
 
 function App() {
   const [darkMode, setDarkMode]  = useState(false);
