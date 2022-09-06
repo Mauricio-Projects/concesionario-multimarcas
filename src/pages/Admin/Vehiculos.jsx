@@ -2,38 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
 const vehiculosBackend = [
-  {
-    nombre: "Corolla",
-    marca: "Toyota",
-    modelo: 2015
-  },
-  {
-    nombre: "Elantra",
-    marca: "Hiunday",
-    modelo: 2012
-  },
-  {
-    nombre: "Prado",
-    marca: "Toyota",
-    modelo: 2018
-  },
-  {
-    nombre: "Mazda6",
-    marca: "Mazda",
-    modelo: 2020
-  },
-  {
-    nombre: "Wolkswagen",
-    marca: "Escarabajo",
-    modelo: 1958
-  },
-  {
-    nombre: "Chevrolet",
-    marca: "Onix",
-    modelo: 2019
-  }
 ]
 
 const Vehiculos = () => {
@@ -68,7 +39,7 @@ const Vehiculos = () => {
               setMostrarTabla(!mostrarTabla)
             }}
             className={`text-white ${colorBoton} p-5 rounded-full m-6 w-28 self-end`}>
-             { textoBoton }
+            { textoBoton }
           </button>
       </div>
       { mostrarTabla ? (
@@ -78,7 +49,7 @@ const Vehiculos = () => {
       setMostrarTabla = { setMostrarTabla } 
       setVehiculos = { setVehiculos }
       listaVehiculos = { vehiculos }
-       />) }
+      />) }
       <ToastContainer 
         position='botton-center' 
         autoClose={4000}
@@ -123,11 +94,11 @@ const Vehiculos = () => {
     setMostrarTabla, 
     listaVehiculos, 
     setVehiculos,
-   }) => {
+  }) => {
 
     const form = useRef(null);
 
-    const submitForm = (e) => {
+    const submitForm =  async(e) => {
       e.preventDefault();
       const fd = new FormData(form.current)
 
@@ -137,13 +108,24 @@ const Vehiculos = () => {
         console.log(nuevoVehiculo)
       });
 
+      const options = {
+        method: 'POST',
+        url: 'https://apimocha.com/carritos/crear',
+        headers: {'Content-Type': 'application/json'},
+        data: {name: nuevoVehiculo.name, brand: nuevoVehiculo.brand, model: nuevoVehiculo.model}
+      };
+
+      await axios.request(options).then(function (response) {
+        console.log(response.data);
+        toast.success('Vehiculo agregado con exito');
+      }).catch(function (error) {
+        console.error(error);
+        toast.error('Error creando un vehiculo');
+      });
+
       setMostrarTabla(true);
-      toast.success('Vehiculo agregado con exito');
-      setVehiculos([...listaVehiculos, nuevoVehiculo]);
       //TODO identificar el caso de exito y mostrar un toast de exito
-      toast.success('Vehiculo agregado con exito');
       //TODO identificar el caso de error y mostrar yn toas de error
-      //toast.error('error creando un vehiculo');
     };
 
     return (
@@ -155,7 +137,7 @@ const Vehiculos = () => {
             <label className='flex flex-col' htmlFor="nombre">
               Nombre del Vehiculo:
               <input 
-                name='nombre' 
+                name='name' 
                 required
                 className='bg-gray-100 border-gray-00 p-2 rounded-lg m-2' 
                 type="text"
@@ -165,7 +147,7 @@ const Vehiculos = () => {
             <label className='flex flex-col' htmlFor="marca"> Marca del vehiculo 
               <select 
                 className='bg-gray-100 border-gray-00 p-2 rounded-lg m-2'  
-                name="marca"
+                name="brand"
                 required
                 defaultValue={0}
                 >
@@ -180,10 +162,10 @@ const Vehiculos = () => {
             <label className='flex flex-col items-center' htmlFor="modelo">
               Modelo del Vehiculo
               <input 
-              name='modelo' 
+              name='model' 
               className='bg-gray-100 border-gray-00 p-2 rounded-lg m-2'
               type="number"
-              min={1980}
+              min={1990}
               max={2024}
               placeholder='año' />
             </label>
@@ -196,7 +178,7 @@ const Vehiculos = () => {
         </form>
       </div>
     );
-  };
+};
 
 
 export default Vehiculos;
